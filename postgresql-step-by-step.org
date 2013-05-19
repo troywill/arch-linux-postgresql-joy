@@ -1,44 +1,61 @@
 * Inspect the PostgreSQL environment
-  - Become the postgres user
+  1. Become the postgres user
     #+BEGIN_SRC sh
-      sudo su - postgres
+      $ sudo su - postgres
     #+END_SRC
-  - psql commands help
+  2. Open the PostgreSQL interactive terminal
+     #+BEGIN_SRC sh
+       $ psql
+     #+END_SRC
+  3. Get help with psql commands
     #+BEGIN_SRC sh
       \?
     #+END_SRC
-  - List the users
+  2. List the users
      #+BEGIN_SRC sh
        \dg
      #+END_SRC
-  - List all the databases
+  3. List all the databases
      #+BEGIN_SRC sh
        \l
      #+END_SRC
 * How to create users
-** Creating new users with SQL from PostgreSQL interactive terminal  
-  1. [X] Become the "postgres" user
-     #+BEGIN_SRC sh
-       sudo su - postgres
-     #+END_SRC
-  2. [X] Open the PostgreSQL interactive terminal
-     #+BEGIN_SRC sh
-       psql
-     #+END_SRC
-** Creating new uses with the createuser program
+** Creating new users with the createuser program
 *** Create the user joe as a superuser, and assign a password immediately
-   1. [ ] Become the postgres user
+   1. Become the postgres user
       #+BEGIN_SRC sh
         sudo su - postgres
       #+END_SRC
-   2. Run createuser with  
-    #+BEGIN_SRC sh
-      $ createuser --pwprompt --superuser --echo joe
-      Enter password for new role: xyzzy
-      Enter it again: xyzzy
-      CREATE ROLE joe PASSWORD 'md5b5f5ba1a423792b526f799ae4eb3d59e' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;
-    #+END_SRC
-
+   2. Run createuser
+      #+BEGIN_SRC sh
+        $ createuser --pwprompt --superuser --echo joe
+        Enter password for new role: xyzzy
+        Enter it again: xyzzy
+        CREATE ROLE joe PASSWORD 'md5b5f5ba1a423792b526f799ae4eb3d59e' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;
+      #+END_SRC
+** Creating new users with SQL from PostgreSQL interactive terminal
+   1. Become the "postgres" user
+      #+BEGIN_SRC sh
+        sudo su - postgres
+      #+END_SRC
+   2. Open the PostgreSQL interactive terminal
+      #+BEGIN_SRC sh
+        psql
+      #+END_SRC
+* How to remove users
+** Removing users with SQL from PostgreSQL interactive terminal
+   1. [ ] Become the "postgres" user
+      #+BEGIN_SRC sh
+        $ sudo su - postgres
+      #+END_SRC
+   2. [ ] Open the PostgreSQL interactive terminal
+      #+BEGIN_SRC sh
+        $ psql
+      #+END_SRC
+   3. [ ] [[http://www.postgresql.org/docs/current/static/sql-dropuser.html][DROP USER]]
+      #+BEGIN_SRC sql
+        DROP USER IF EXISTS joe
+      #+END_SRC
 * Creating new databases
 ** Creating a new database with SQL from PostgreSQL interactive terminal
    1. Become the postgres user
@@ -49,8 +66,9 @@
       #+BEGIN_SRC sql
         CREATE
       #+END_SRC
-* Create and Delete databases
+* Create and delete databases
 ** Create a database  
 * Documentation Links
 ** [[http://www.postgresql.org/docs/][PostgreSQL: Documentation]] www.postgresql.org/docs/
    - [[http://www.postgresql.org/docs/manuals/][Current Manual]]
+* Heroku PostgreSQL

@@ -20,11 +20,9 @@
        \l
      #+END_SRC
 * How to create users
-** Create a superuser with your login name
+** Create a superuser with your login name ([[http://www.postgresql.org/docs/current/static/app-createuser.html][app-createuser.html]])
    #+BEGIN_SRC sh
    sudo -u postgres createuser --pwprompt --superuser joe
-   sudo -u postgres psql
-   \password $USER
    #+END_SRC
 ** Creating new users with the [[http://www.postgresql.org/docs/current/static/app-createuser.html][create user]] client program
 *** Create the user joe as a superuser, and assign a password immediately

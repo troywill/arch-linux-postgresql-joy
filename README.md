@@ -5,7 +5,7 @@
 <li><a href="#sec-1">1. Inspect the PostgreSQL environment</a></li>
 <li><a href="#sec-2">2. How to create users</a>
 <ul>
-<li><a href="#sec-2-1">2.1. Create a superuser with your login name</a></li>
+<li><a href="#sec-2-1">2.1. Create a superuser with your login name (app-createuser.html)</a></li>
 <li><a href="#sec-2-2">2.2. Creating new users with the create user client program</a>
 <ul>
 <li><a href="#sec-2-2-1">2.2.1. Create the user joe as a superuser, and assign a password immediately</a></li>
@@ -65,11 +65,9 @@
 
 # How to create users
 
-## Create a superuser with your login name
+## Create a superuser with your login name ([app-createuser.html](http://www.postgresql.org/docs/current/static/app-createuser.html))
 
     sudo -u postgres createuser --pwprompt --superuser joe
-    sudo -u postgres psql
-    \password $USER
 
 ## Creating new users with the [create user](http://www.postgresql.org/docs/current/static/app-createuser.html) client program
 

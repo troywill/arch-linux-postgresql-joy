@@ -20,27 +20,33 @@
        \l
      #+END_SRC
 * How to create users
-** Creating new users with the createuser program
+** Create a superuser with your login name
+   #+BEGIN_SRC sh
+   sudo -u postgres createuser --pwprompt --superuser joe
+   sudo -u postgres psql
+   \password $USER
+   #+END_SRC
+** Creating new users with the [[http://www.postgresql.org/docs/current/static/app-createuser.html][create user]] client program
 *** Create the user joe as a superuser, and assign a password immediately
-   1. Become the postgres user
+   1. [X] Run the create user program
       #+BEGIN_SRC sh
-        sudo su - postgres
-      #+END_SRC
-   2. Run createuser
-      #+BEGIN_SRC sh
-        $ createuser --pwprompt --superuser --echo joe
+        createuser --pwprompt --superuser --echo joe
         Enter password for new role: xyzzy
         Enter it again: xyzzy
         CREATE ROLE joe PASSWORD 'md5b5f5ba1a423792b526f799ae4eb3d59e' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;
       #+END_SRC
-** Creating new users with SQL from PostgreSQL interactive terminal
-   1. Become the "postgres" user
+** Creating new users with [[http://www.postgresql.org/docs/current/static/sql-createdatabase.html][CREATE USER]] from PostgreSQL interactive terminal
+   1. [X] Become the "postgres" user
       #+BEGIN_SRC sh
         sudo su - postgres
       #+END_SRC
-   2. Open the PostgreSQL interactive terminal
+   2. [X] Open the PostgreSQL interactive terminal
       #+BEGIN_SRC sh
         psql
+      #+END_SRC
+   3. [ ] Run the [[http://www.postgresql.org/docs/current/static/sql-createdatabase.html][CREATE USER]] SQL command
+      #+BEGIN_SRC sh
+        CREATE ROLE jonathan LOGIN;
       #+END_SRC
 * How to remove users
 ** Removing users with SQL from PostgreSQL interactive terminal
@@ -56,19 +62,65 @@
       #+BEGIN_SRC sql
         DROP USER IF EXISTS joe
       #+END_SRC
+* How to update users http://www.postgresql.org/docs/current/static/sql-alteruser.html
+  #+BEGIN_SRC sql
+    ALTER USER david WITH PASSWORD 'hu8jmn3';
+    ALTER USER weight WITH PASSWORD 'weight';
+  #+END_SRC
 * Creating new databases
-** Creating a new database with SQL from PostgreSQL interactive terminal
+** Create a new database with [[http://www.postgresql.org/docs/current/static/app-createdb.html][createdb]]
+   1. Run creatdb
+      #+BEGIN_SRC sh
+        createdb demo --owner railsapp
+      #+END_SRC
+** Create a new database with [[http://www.postgresql.org/docs/current/static/app-createdb.html][createdb]]
    1. Become the postgres user
       #+BEGIN_SRC sh
         sudo su - postgres
       #+END_SRC
-   2. Run the "[[http://www.postgresql.org/docs/current/static/sql-createdatabase.html][CREATE USER]]" SQL command
+   2. Run the "CREATE DATABASE" SQL command
       #+BEGIN_SRC sql
-        CREATE
+        CREATE DATABASE sales OWNER salesapp TABLESPACE salesspace;
+        CREATE DATABASE bootstrap_development OWNER bootstrap;
+        CREATE DATABASE bootstrap_test OWNER bootstrap;
+        CREATE DATABASE bootstrap_production OWNER bootstrap;
       #+END_SRC
-* Create and delete databases
-** Create a database  
+* How to restart PostgreSQL
+** Ubuntu
+   #+BEGIN_SRC sh
+     service --status-all
+     sudo service postgresql-8.4  --full-restart
+   #+END_SRC
 * Documentation Links
 ** [[http://www.postgresql.org/docs/][PostgreSQL: Documentation]] www.postgresql.org/docs/
    - [[http://www.postgresql.org/docs/manuals/][Current Manual]]
 * Heroku PostgreSQL
+* Ubuntu Unicode encoding = 'UTF8';
+
+  - See http://jacobian.org/writing/pg-encoding-ubuntu/
+  - See http://blog.lnx.cx/tag/locales-fix-slicehost-ubuntu/
+
+  In order to connect to template0, we need to change that flag:
+  #+BEGIN_SRC sql
+    template1=# UPDATE pg_database SET datallowconn = TRUE
+    template1-# WHERE datname = 'template0';
+    UPDATE 1
+  #+END_SRC
+
+  Now we can connect, and drop the Template1 database in order to
+  replace it with a copy of Template0.
+
+  #+BEGIN_SRC sql
+    template0=# UPDATE pg_database SET datistemplate = FALSE
+    template0-# WHERE datname = 'template1';
+    UPDATE 1
+
+    # Risky!!! Backup First!!!
+    template0=# drop database template1;
+    DROP
+    template0=# create database template1 with template = template0;
+    create database template1 with template = template0 encoding = 'UTF8';
+    CREATE
+    
+  #+END_SRC
+
